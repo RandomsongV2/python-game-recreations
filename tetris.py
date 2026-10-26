@@ -574,7 +574,7 @@ def init_game():
     global top_score
     #top_score = 272060
     try:
-        score_file = open('top_score', 'rb')
+        score_file = open('tetris_top_score', 'rb')
         top_score = int.from_bytes(score_file.read())
         score_file.close()
     except:
@@ -968,7 +968,9 @@ def update():
         solidify_shape(shape, shape_rotation, *shape_pos)
         
         collapse_lanes(tetromino_lane_collapse[shape][shape_rotation], shape_pos[1])
-        spawn_shape()
+        global game_running
+        if game_running:
+            spawn_shape()
 
 def game_over():
     global game_running
@@ -979,7 +981,7 @@ def game_over():
         global top_score
         to_save = min(score, 999999)
         if to_save > top_score:
-            score_file = open('top_score', 'wb')
+            score_file = open('tetris_top_score', 'wb')
             score_file.write(bytes([to_save//65536, (to_save%65536)//256, to_save%256]))
             score_file.close()
         global used_keys
